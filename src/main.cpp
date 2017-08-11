@@ -9,6 +9,10 @@
 #include "MPC.h"
 #include "json.hpp"
 
+// #include "matplotlibcpp.h"
+
+// namespace plt = matplotlibcpp;
+
 // for convenience
 using json = nlohmann::json;
 
@@ -16,6 +20,8 @@ using json = nlohmann::json;
 constexpr double pi() { return M_PI; }
 double deg2rad(double x) { return x * pi() / 180; }
 double rad2deg(double x) { return x * 180 / pi(); }
+
+std::mutex mtx;
 
 // Checks if the SocketIO event has JSON data.
 // If there is data the JSON object in string format will be returned,
@@ -154,7 +160,10 @@ int main()
 
           // solve
           auto vars = mpc.Solve(state, coeffs);
-
+          // plt::plot(vars);
+          // plt::draw();
+          // plt::show();
+         
           // result
           steer_value = vars[0] / (deg2rad(25) * Lf);
           throttle_value = vars[1];

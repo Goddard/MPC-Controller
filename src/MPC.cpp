@@ -3,6 +3,10 @@
 #include <cppad/ipopt/solve.hpp>
 #include "Eigen-3.3/Eigen/Core"
 
+//extra plotting
+// #include "matplotlibcpp.h"
+
+// namespace plt = matplotlibcpp;
 using CppAD::AD;
 
 // Set the timestep length and duration
@@ -61,23 +65,23 @@ public:
     // Cost
     for (int t = 0; t < N; t++)
     {
-      fg[0] += 3000 * CppAD::pow(vars[cte_start + t] - ref_cte, 2);
-      fg[0] += 3000 * CppAD::pow(vars[epsi_start + t] - ref_epsi, 2);
+      fg[0] += 2800 * CppAD::pow(vars[cte_start + t] - ref_cte, 2);
+      fg[0] += 2800 * CppAD::pow(vars[epsi_start + t] - ref_epsi, 2);
       fg[0] += CppAD::pow(vars[v_start + t] - ref_v, 2);
     }
 
     // Minimize actuations
     for (int t = 0; t < N - 1; t++)
     {
-      fg[0] += 5 * CppAD::pow(vars[delta_start + t], 2);
-      fg[0] += 5 * CppAD::pow(vars[a_start + t], 2);
+      fg[0] += 4.8 * CppAD::pow(vars[delta_start + t], 2);
+      fg[0] += 4.8 * CppAD::pow(vars[a_start + t], 2);
     }
 
     // Minimize the value gap between sequential actuations.
     for (int t = 0; t < N - 2; t++)
     {
-      fg[0] += 300 * CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
-      fg[0] += 10 * CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2);
+      fg[0] += 275 * CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
+      fg[0] += 9.5 * CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2);
     }
 
     // for (int t = 1; t < N ; t++) {
@@ -122,7 +126,7 @@ public:
       AD<double> delta0 = vars[delta_start + t - 1];
       AD<double> a0 = vars[a_start + t - 1];
 
-      AD<double> f0 = coeffs[0] + coeffs[1] * x0 + coeffs[2] * pow(x0, 2) + coeffs[3] * pow(x0, 3);// * x0 * x0;
+      AD<double> f0 = coeffs[0] + coeffs[1] * x0 + coeffs[2] * pow(x0, 2) + coeffs[3] * pow(x0, 3);
       // AD<double> f0 = coeffs[0] + coeffs[1] * x0;
       // AD<double> psides0 = CppAD::atan(coeffs[1]);
       AD<double> psides0 = CppAD::atan(3 * coeffs[3] * pow(x0, 2) + 2 * coeffs[2] * x0 + coeffs[1]);
@@ -296,5 +300,9 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs)
     result.push_back(solution.x[y_start + i + 1]);
   }
 
+  // plt::plot(result);
+  // plt::draw();
+  // // plt::pause(0.1)
+  // plt::show(); 
   return result;
 }
