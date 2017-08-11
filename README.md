@@ -1,6 +1,6 @@
 [//]: # (Image References)
-[state]:  ./images/state-example-1.png
-[model]:  ./images/kinematic-model-formulas.png
+[state]:  images/state-example-1.png
+[model]:  images/kinematic-model-formulas.png
 
 ## The Model
 
