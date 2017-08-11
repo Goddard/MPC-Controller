@@ -38,6 +38,8 @@ double epsi_start = cte_start + N;
 //
 double delta_start = epsi_start + N;
 double a_start = delta_start + N - 1;
+double prevDelta = 0;
+double prevA = 0;
 
 class FG_eval
 {
@@ -201,6 +203,12 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs)
 
   Dvector vars_lowerbound(n_vars);
   Dvector vars_upperbound(n_vars);
+
+  // vars_lowerbound[delta_start]=prevDelta;
+  // vars_upperbound[delta_start]=prevDelta;
+  // vars_lowerbound[a_start]=prevA;
+  // vars_upperbound[a_start]=prevA;
+
   // Set lower and upper limits for variables.
   for (int i = 0; i < delta_start; i++)
   {
@@ -293,16 +301,22 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs)
   vector<double> result;
   result.push_back(solution.x[delta_start]);
   result.push_back(solution.x[a_start]);
-
+  
   for (int i = 0; i < N - 1; i++)
   {
     result.push_back(solution.x[x_start + i + 1]);
     result.push_back(solution.x[y_start + i + 1]);
+    // prevDelta=solution.x[delta_start+1];
+    // prevA=solution.x[a_start+1];
+    // result.push_back(prevDelta);
+    // result.push_back(prevA);
   }
 
   // plt::plot(result);
   // plt::draw();
   // // plt::pause(0.1)
   // plt::show(); 
+
+  // auto result = {}
   return result;
 }

@@ -112,12 +112,6 @@ int main()
           double psi = j[1]["psi"];
           double v = j[1]["speed"];
 
-          /*
-          * Calculate steering angle and throttle using MPC.
-          *
-          * Both are in between [-1, 1].
-          *
-          */
           double steer_value = j[1]["steering_angle"];
           double throttle_value = j[1]["throttle"];
 
@@ -153,7 +147,9 @@ int main()
 
           // calculate cte
           const double cte = polyeval(coeffs, x1) - y1;
-          double epsi = psi1 - atan(3 * coeffs[3] * x1 * x1 + 2 * coeffs[2] * x1 + coeffs[1]);
+          // double epsi = psi1 - atan(3 * coeffs[3] * x1 * x1 + 2 * coeffs[2] * x1 + coeffs[1]);
+          //simplified because value of multiple zeros in formula
+          double epsi = -atan(coeffs[1]);
 
           Eigen::VectorXd state(6);
           state << x1, y1, psi1, v1, cte, epsi;
@@ -203,7 +199,6 @@ int main()
           // the points in the simulator are connected by a Yellow line
           const double poly_inc = 2.5;
           const int num_points = 25;
-
           for (int i = 0; i < num_points; i++)
           {
             next_x_vals.push_back(poly_inc * i);
