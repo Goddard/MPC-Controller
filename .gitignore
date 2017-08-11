@@ -1,0 +1,11 @@
+.vscode
+build
+tags
+.editorconfig
+.DS_Store
+.directory
+Eigen-3.3
+Ipopt-3.12.4
+Ipopt-releases-3.12.1
+install*
+CODEOWNERS
